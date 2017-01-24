@@ -24,11 +24,15 @@ class Game {
         
       }
  
-  } ;
+  };
 
+  currentPlayer() {
+    return $(this).val();
+  };
 
   addMove(move) {
-      
+      this.moves.push(move);
+      console.log(this.moves)
   };
 
   isFinished() {
@@ -64,16 +68,17 @@ $(document).ready(function(){
       
     game.prepareField();
 
-    $('.move-input').click(function(){
+    $('.move-input').keyup(function(){
 
       var move = new Move();
 
-      move.player = game.currentPlayer;
+      move.player = game.currentPlayer();
 
       move.vertical = +$(this).data('vertical');
       move.horizontal = +$(this).data('horizontal'); 
 
       game.addMove(move);
+
       game.isFinished();
 
     });
@@ -81,10 +86,4 @@ $(document).ready(function(){
   });
 
 });
-
-
-
-     
-
-
 
