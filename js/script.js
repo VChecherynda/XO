@@ -27,7 +27,8 @@ class Game {
   };
 
   currentPlayer() {
-    return $(this).val();
+    var symbol = $(this).val();
+    return symbol;
   };
 
   addMove(move) {
