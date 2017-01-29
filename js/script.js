@@ -1,21 +1,27 @@
 class Game {
   constructor(size){
     this.size = +size;
-    this.startNewMove();
+    this.totalCellamount = size * size;
+    this.currentPlayer = 'X';
+    this.startNewGame();
   }
 
-  startNewMove() {
-    this.currentPlayer = 'X';
+  startNewGame() {
+    this.renderFieldHtml();
+    this.totalCellamount = this.size * this.size;
+    
     this.moves = new Array(this.size);
     for(var i = 0; i < this.size; i++) {
       this.moves[i] = new Array(this.size);
     }
-    this.renderFieldHtml();
+    
     this.addCellClickEventListener();
   }
 
   currentPlayerHtml() {
-    return `<div id='game_current_player'>${this.currentPlayer}</div>`;
+    var player = $('#currentPlayer');
+    player.empty();
+    player.append(`Current player is ${this.currentPlayer}`);
   }
 
   cellHtml(x, y) {
@@ -24,9 +30,8 @@ class Game {
 
   renderFieldHtml() {
     var field = $('#field');
-
     field.empty();
-    field.append(`Current Player is ${this.currentPlayerHtml()}`);
+    this.currentPlayerHtml();
     field.append('<table>');
     for(var x = 0; x < this.size; x++) {
       field.append('<tr>');
@@ -56,25 +61,33 @@ class Game {
     move.horizontal = x; 
     move.vertical = y;
     this.moves[x][y] = move;
+    this.isDraw();
     this.isFinal(move);
     this.changeCurrentPlayer();
+    this.currentPlayerHtml();
+  }
+
+  isDraw() {
+    this.totalCellamount -= 1;
+    if(this.totalCellamount === 0) {
+      alert('Draw !');
+      this.startNewGame();
+    }
   }
 
   isFinal(move) {
     if( this.checkHorizontal(move) || this.checkVertical(move) || this.checkMainDiagonal(move) || this.checkSecondaryDiagonal(move)) {
       this.renderWinner();
-      this.startNewMove();
-    }  
+      this.startNewGame();
+    } 
   }
 
   checkHorizontal(move) {
     var win = true;
-    console.log(this.moves);
 
     for(var i = 0; i < this.size; i++) {
 
       var subjectCell = this.moves[move.horizontal][i];
-      console.log(subjectCell);
 
       if(!subjectCell || (subjectCell.player != move.player)) {
         win = false
@@ -89,12 +102,10 @@ class Game {
 
   checkVertical(move) {
     var win = true;
-    console.log(this.moves);
 
     for(var i = 0; i < this.size; i++) {
 
       var subjectCell = this.moves[i][move.vertical];
-      console.log(subjectCell);
 
       if(!subjectCell || (subjectCell.player != move.player)) {
         win = false
@@ -109,12 +120,10 @@ class Game {
 
   checkMainDiagonal(move) {
     var win = true;
-    console.log(this.moves);
 
     for(var i = 0; i < this.size; i++) {
 
       var subjectCell = this.moves[i][i];
-      console.log(subjectCell);
 
       if(!subjectCell || (subjectCell.player != move.player)) {
         win = false
@@ -129,12 +138,10 @@ class Game {
 
   checkSecondaryDiagonal(move) {
     var win = true;
-    console.log(this.moves);
 
     for(var i = 0; i < this.size; i++) {
 
       var subjectCell = this.moves[i][this.size- 1 - i];
-      console.log(subjectCell);
 
       if(!subjectCell || (subjectCell.player != move.player)) {
         win = false
@@ -146,18 +153,6 @@ class Game {
     return win;  
   
   }
-
-    // for(var i = 0; i < this.size; i++) {
-    //   var subjectCell = this.moves[this.size - 1 - i][i];
-    //   if(!subjectCell || (subjectCell.player != move.player)) {
-    //     win = false
-    //     break;
-    //   }
-    // }
-
-
-  //   return win;
-  // }
 
   changeCurrentPlayer() {
     this.currentPlayer = (this.currentPlayer == 'X') ? 'O' : 'X'
