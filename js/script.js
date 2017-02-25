@@ -30,18 +30,27 @@ class Game {
 
   renderFieldHtml() {
     var field = $('#field');
+
     field.empty();
     this.currentPlayerHtml();
     field.append('<table>');
+
+    var table = $('table');
+
     for(var x = 0; x < this.size; x++) {
-      field.append('<tr>');
-        for(var y = 0; y < this.size; y++) {
-          field.append(this.cellHtml(x,y));
-        }
-      field.append('<tr/>');
+
+        var row = $('<tr>');
+
+          for(var y = 0; y < this.size; y++) {
+            var rowData = this.cellHtml(x,y);
+            row.append(rowData);
+          };
+       
+        table.append(row)
+
+      }
+
     }
-    field.append('</table>');
-  }
 
   addCellClickEventListener() {
     var game = this;
