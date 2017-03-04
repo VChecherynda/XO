@@ -33,9 +33,8 @@ class Game {
 
     field.empty();
     this.currentPlayerHtml();
-    field.append('<table>');
-
-    var table = $('table');
+    
+    var table = field.append('<table>');
 
     for(var x = 0; x < this.size; x++) {
 
@@ -187,7 +186,7 @@ $(document).ready(function(){
 
   $('#start').click(function(){
     var size = $('#size').val(); 
-    if( isNaN(size) ) return alert('Enter valid size!');
+    if( isNaN(size) || size == 0 ) return alert('Enter valid size!');
     game = new Game(size);
   });
 });
